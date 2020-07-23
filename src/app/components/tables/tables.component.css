@@ -1,0 +1,12 @@
+.subtitle{
+    background-color:#19487b;
+    height: 45px;
+    margin: -15px;
+    padding: 12px;
+    color: #ffffff;
+    margin-bottom: 40px;
+}
+
+.forms{
+    min-width: 200px;
+}

@@ -1,0 +1,10 @@
+.img_banner{
+    width: 40vw;
+    height: 88vh;
+    margin-left: -20vw;
+    background-color: #F3F3F3;
+}
+
+.img_banner img{
+    width: 18vw;
+}

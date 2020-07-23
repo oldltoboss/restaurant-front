@@ -1,0 +1,7 @@
+.navbar{
+    min-height: 6em;
+    height: 8vh;
+    box-shadow: 0px 5px 20px 0px rgba(196,196,196,1);
+    margin-bottom: 15px;
+    background-color: #5BAAFF;
+}

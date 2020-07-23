@@ -1,0 +1,70 @@
+<div class="subtitle">
+  <h6>Tablas</h6>
+</div>
+
+
+<mat-table [dataSource]="tables" class="mat-elevation-z8">
+  
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef> ID. </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Nombre. </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="size">
+    <mat-header-cell *matHeaderCellDef> Capacidad (personas). </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.size}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="zone">
+    <mat-header-cell *matHeaderCellDef> Zona. </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.zone.name}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="isActive">
+    <mat-header-cell *matHeaderCellDef> Status. </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.isActive && 'Activada'|| 'Desactivada'}}
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+    <mat-cell *matCellDef="let element">     
+      <button mat-button color="primary" (click)="openModal(element, modalTable)">Editar</button>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+
+<ng-template #modalTable>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" *ngIf="info_row">Mesa: {{ info_row.name }}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form id="updateTable" [formGroup]="form" (ngSubmit)="submit()" class="forms">
+        <mat-form-field appearance="fill">
+          <mat-label>Nombre</mat-label>
+          <input matInput placeholder="name" class="form-control"  name="name">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <input matInput placeholder="size" class="form-control"  name="size">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <input matInput placeholder="zone" class="form-control"  name="zone">
+        </mat-form-field>
+        <br>
+        <!-- <mat-select matInput>
+          <mat-option *ngFor="let zone of zones" [value]="zone.id">{{ zone.name }}</mat-option>
+          <input matInput placeholder="isActive" class="form-control"  name="isActive">
+        </mat-select> -->
+        <br>
+        <button id="btnSubmit" mat-raised-button type="submit" color="primary">Guardar</button>
+      </form>
+  </div>
+</ng-template>
