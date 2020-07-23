@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { TableComponent } from './components/tables/tables.component';
+import { ZoneComponent } from './components/zones/zones.component';
 import {HttpClientModule} from '@angular/common/http';
 import { ROUTES } from './app.routes';
 import { RouterModule } from '@angular/router';
@@ -15,8 +16,11 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {  
   MatFormFieldModule,
   MatInputModule,
-  MatRippleModule
+  MatRippleModule,
+  MatSelectModule,
+  MatCheckboxModule
 } from '@angular/material';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
@@ -24,7 +28,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   declarations: [
     AppComponent,
     NavbarComponent,
-    TableComponent
+    TableComponent,
+    ZoneComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -38,6 +44,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatFormFieldModule,
     MatInputModule,
     MatRippleModule,
+    MatSelectModule,
+    MatCheckboxModule,
     BrowserAnimationsModule
   ],
   providers: [],

@@ -7,6 +7,6 @@
     margin-bottom: 40px;
 }
 
-.forms{
-    min-width: 200px;
+.active{
+    background-color: #04defe;
 }

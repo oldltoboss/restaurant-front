@@ -19,5 +19,17 @@ export class ZonesService {
       map(resp => resp.data)
     )
   }
+  
+  saveZone(data){
+    return this.http.post<HttpRequestModel.Response>(environment.apiBase+'zones',data).pipe(
+      map(resp => resp.data)
+    )
+  }
+
+  deleteAZone(id){
+    return this.http.delete<HttpRequestModel.Response>(environment.apiBase+'zones/'+id).pipe(
+      map(resp => resp.data)
+    )
+  }
 
 }

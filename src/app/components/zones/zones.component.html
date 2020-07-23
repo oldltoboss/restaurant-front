@@ -1,0 +1,93 @@
+<div class="subtitle">
+  <div class="row">
+    <div class="col">
+      <h6>Zonas</h6>
+    </div>
+    <div class="col">
+      <h6 class="pull-right" style="text-align: end;"><a (click)="openModal(null, modalZone)">Crear zona</a></h6>
+    </div>
+  </div>
+</div>
+
+
+<mat-table [dataSource]="zones" class="mat-elevation-z8">
+  
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef> ID. </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Nombre. </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="description">
+    <mat-header-cell *matHeaderCellDef> Descripción. </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.description}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+    <mat-cell *matCellDef="let element">     
+      <button mat-button color="primary" (click)="loadInfoTables(element); openModal(element, modalTables)" *ngIf="element.tables.length >0">Ver mesas</button>
+      <button mat-button color="primary" (click)="loadInfo(element); openModal(element, modalZone)">Editar</button>
+      <button mat-button color="danger" (click)="delete(element)" *ngIf="element.tables.length <=0">Eliminar</button>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+
+<ng-template #modalZone>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" *ngIf="info_row!=null">Zona: {{ info_row.name }}</h4>
+    <h4 class="modal-title pull-left" *ngIf="!info_row">Creando una nueva zona</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form id="updateTable" [formGroup]="form" (ngSubmit)="submit()">
+      <mat-label>Nombre de la zona</mat-label>
+      <input matInput placeholder="Nombre de la mesa" formControlName="name" class="form-control"  name="name" [value]="info_row.name" *ngIf="info_row!=null">
+      <input matInput placeholder="Nombre de la mesa" formControlName="name" class="form-control"  name="name" *ngIf="!info_row">
+      
+      <mat-label>Descripción</mat-label>
+      <input matInput placeholder="Descripción" formControlName="description" class="form-control"  name="description" [value]="info_row.description" *ngIf="info_row!=null">
+      <input matInput placeholder="Descripción" formControlName="description" class="form-control"  name="description"  *ngIf="!info_row">
+
+      <span class="pull-right" [hidden]="form.valid">Favor de llenar bien los campos</span>
+      <br>
+      <br>
+      <button mat-button color="primary" type="submit">Guardar</button>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #modalTables>
+  <div class="modal-header">
+    <!-- <h4 class="modal-title pull-left" *ngIf="info_row!=null">Zona: {{ info_row.name }}</h4> -->
+    <h4 class="modal-title pull-left" >Mesas de {{zoneName}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <mat-table [dataSource]="zonesTable" class="mat-elevation-z8">
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef> ID. </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Nombre. </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="size">
+        <mat-header-cell *matHeaderCellDef> Capacidad (personas). </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.size}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumnsTables"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumnsTables;"></mat-row>
+    </mat-table>
+  </div>
+</ng-template>
+

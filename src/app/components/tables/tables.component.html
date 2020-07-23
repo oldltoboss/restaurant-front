@@ -1,5 +1,12 @@
 <div class="subtitle">
-  <h6>Tablas</h6>
+  <div class="row">
+    <div class="col">
+      <h6>Mesas</h6>
+    </div>
+    <div class="col">
+      <h6 class="pull-right" style="text-align: end;"><a (click)="openModal(null, modalTable)">Crear mesa</a></h6>
+    </div>
+  </div>
 </div>
 
 
@@ -29,42 +36,47 @@
   <ng-container matColumnDef="actions">
     <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
     <mat-cell *matCellDef="let element">     
-      <button mat-button color="primary" (click)="openModal(element, modalTable)">Editar</button>
+      <button mat-button color="primary" (click)="loadInfo(element); openModal(element, modalTable)">Editar</button>
+      <button mat-button color="danger" (click)="delete(element)" *ngIf="!element.isActive">Eliminar</button>
     </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'active': row.isActive}"></mat-row>
 </mat-table>
 
 <ng-template #modalTable>
   <div class="modal-header">
-    <h4 class="modal-title pull-left" *ngIf="info_row">Mesa: {{ info_row.name }}</h4>
+    <h4 class="modal-title pull-left" *ngIf="info_row!=null">Mesa: {{ info_row.name }}</h4>
+    <h4 class="modal-title pull-left" *ngIf="!info_row">Creando una nueva mesa</h4>
     <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <form id="updateTable" [formGroup]="form" (ngSubmit)="submit()" class="forms">
-        <mat-form-field appearance="fill">
-          <mat-label>Nombre</mat-label>
-          <input matInput placeholder="name" class="form-control"  name="name">
-        </mat-form-field>
-        <br>
-        <mat-form-field>
-          <input matInput placeholder="size" class="form-control"  name="size">
-        </mat-form-field>
-        <br>
-        <mat-form-field>
-          <input matInput placeholder="zone" class="form-control"  name="zone">
-        </mat-form-field>
-        <br>
-        <!-- <mat-select matInput>
-          <mat-option *ngFor="let zone of zones" [value]="zone.id">{{ zone.name }}</mat-option>
-          <input matInput placeholder="isActive" class="form-control"  name="isActive">
-        </mat-select> -->
-        <br>
-        <button id="btnSubmit" mat-raised-button type="submit" color="primary">Guardar</button>
-      </form>
+    <form id="updateTable" [formGroup]="form" (ngSubmit)="submit()">
+        
+          <mat-label>Nombre de la mesa</mat-label>
+          <input matInput placeholder="Nombre de la mesa" formControlName="name" class="form-control"  name="name" [value]="info_row.name" *ngIf="info_row!=null">
+          <input matInput placeholder="Nombre de la mesa" formControlName="name" class="form-control"  name="name" *ngIf="!info_row">
+          
+          <mat-label>Tamaño máximo</mat-label>
+          <input matInput placeholder="size" formControlName="size" class="form-control"  name="size" [value]="info_row.size" type="number" *ngIf="info_row!=null">
+          <input matInput placeholder="size" formControlName="size" class="form-control"  name="size" type="number" *ngIf="!info_row">
+          
+          <mat-label>Zona</mat-label>
+          <select matNativeControl matInput placeholder="zone" formControlName="zone" class="form-control"  name="zone" >
+            <option *ngFor="let zone of zones" [value]="zone.id" selected>{{zone.name}}</option>
+          </select>
+
+          <mat-label>Mesa activada</mat-label>
+          <mat-checkbox matInput formControlName="isActive" class="form-control"  name="isActive" [checked]="info_row.isActive" *ngIf="info_row!=null"></mat-checkbox>
+          <mat-checkbox matInput formControlName="isActive" class="form-control"  name="isActive" *ngIf="!info_row"></mat-checkbox>
+
+          <span class="pull-right" [hidden]="form.valid">Favor de llenar bien los campos</span>
+          <br>
+          <br>
+          <button mat-button color="primary" type="submit">Guardar</button> 
+        </form>
   </div>
 </ng-template>

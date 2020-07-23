@@ -19,5 +19,17 @@ export class TablesService {
       map(resp => resp.data)
     )
   }
+  
+  deleteATable(id){
+    return this.http.delete<HttpRequestModel.Response>(environment.apiBase+'tables/'+id).pipe(
+      map(resp => resp.data)
+    )
+  }
+  
+  saveATables(data:any){
+    return this.http.post<HttpRequestModel.Response>(environment.apiBase+'tables', data).pipe(
+      map(resp => resp.data)
+    )
+  }
 
 }

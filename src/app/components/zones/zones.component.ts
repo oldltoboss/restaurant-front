@@ -7,17 +7,20 @@ import { ModalModule, BsModalRef,BsModalService } from 'ngx-bootstrap/modal';
 import {FormBuilder, Validators} from '@angular/forms'
 
 @Component({
-  selector: 'app-tables',
-  templateUrl: './tables.component.html',
-  styleUrls: ['./tables.component.css']
+  selector: 'app-zones',
+  templateUrl: './zones.component.html',
+  styleUrls: ['./zones.component.css']
 })
-export class TableComponent implements OnInit {
+export class ZoneComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'size', 'zone', 'isActive', 'actions'];
+  displayedColumns: string[] = ['id', 'name', 'description', 'actions'];
+  displayedColumnsTables: string[] = ['id', 'name', 'size'];
   private tables = [];
   private zones = [];
+  private zonesTable = [];
   private info_row = null;
   private form;
+  private zoneName;
 
   constructor(
     private tablesService: TablesService,
@@ -29,9 +32,7 @@ export class TableComponent implements OnInit {
 
     this.form = formBuilder.group({
       name: ['', Validators.required],
-      size: ['', Validators.required],
-      zone: ['', Validators.required],
-      isActive: [''], 
+      description: ['', Validators.required]
     });
 
     
@@ -41,50 +42,47 @@ export class TableComponent implements OnInit {
     
     await this.refreshData();
 
+  }
+
+  async refreshData(){
     this.zonesService.getAllZones().subscribe((result:any)=>{
       this.zones = result;
       console.log(result)
     });
   }
 
-  async refreshData(){
-    await this.tablesService.getAllTables().subscribe((result:any)=>{
-      this.tables = result;
-      console.log(result)
-    });
-  }
-
   async delete(item){
-    await this.tablesService.deleteATable(item.id).subscribe((result:any)=>{
+    await this.zonesService.deleteAZone(item.id).subscribe((result:any)=>{
       this.refreshData();
     });
   }
 
   loadInfo(item){
     this.form.value.name = item.name;
-    this.form.value.size = item.size;
-    this.form.value.zone = item.zone;
-    this.form.value.isActive = item.isActive;
+    this.form.value.size = item.description;
+  }
+
+  loadInfoTables(element){
+    console.log(element.tables)
+    this.zonesTable = element.tables;
+    this.zoneName = element.name;
   }
 
   async submit(){
-
-    console.log(this.form.value)
 
     if(this.form.valid){
 
       let data = {
         "name":this.form.value.name,
-        "size":this.form.value.size,
-        "isActive":this.form.value.isActive,
-        "zone":this.form.value.zone,
+        "description":this.form.value.description,
+        "isActive":true,
       }
 
       if(this.info_row!=null)
         data["id"] = this.info_row.id;
 
 
-      await this.tablesService.saveATables(data).subscribe(async (result:any)=>{
+      await this.zonesService.saveZone(data).subscribe(async (result:any)=>{
         console.log(result)
         await this.refreshData();
         this.modalRef.hide();
@@ -92,6 +90,9 @@ export class TableComponent implements OnInit {
 
     }
   }
+
+
+
   modalRef: BsModalRef;
   openModal(info:any, modalTable): void {
     this.modalRef = this.modalService.show(modalTable);
